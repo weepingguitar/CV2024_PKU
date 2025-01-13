@@ -1,0 +1,10 @@
+*.pth
+data
+runs
+images
+.vscode
+__pycache__
+*.pt
+training.py
+test.py
+ReadMe.md
