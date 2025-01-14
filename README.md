@@ -43,7 +43,7 @@ pyvox: https://github.com/gromgull/py-vox-io
    python training_GAN64.py
    ```
 
-   The first command will train the model on 32x32x32 voxel data, and the second command will train the model on 64x64x64 voxel data. The 32 resolution will take about ..., and the 64 resolution will take about ...
+   The first command will train the model on 32x32x32 voxel data, and the second command will train the model on 64x64x64 voxel data. For reference, with 32 resolution, it takes about 75min to train the VAE only for 5 epochs, and about 4.5h to train the GAN for 20 epochs.
 
 ## 4. Testing
 
