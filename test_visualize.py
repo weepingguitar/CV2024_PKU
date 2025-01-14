@@ -10,12 +10,12 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--dim_size', type=int, default=32) #分辨率：32/64
 parser.add_argument('--model_path', type=str, default="G32_2_2025-01-13-01-22-37.pth") #模型权重路径
-parser.add_argument('--selecte_class', type=int, default=3) #选取class。0表示所有class
+parser.add_argument('--selected_class', type=int, default=3) #选取class。0表示所有class
 args = parser.parse_args()
 
 
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-test_dataset=FragmentDataset(vox_path='data',vox_type='test',dim_size=args.dim_size,transform=None,selecte_class=args.selecte_class)
+test_dataset=FragmentDataset(vox_path='data',vox_type='test',dim_size=args.dim_size,transform=None,selected_class=args.selected_class)
 
 test_loader=DataLoader(test_dataset,batch_size=1,shuffle=True)  
 
