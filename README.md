@@ -2,7 +2,6 @@
 
 This repository implemented GAN for pottery completion.
 
-![](https://fancy-icebreaker-99b.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F69ca2e73-08a0-44d6-970a-605a1725db83%2Ff55c52d4-36be-44a5-a9ae-894ed0f7be9b%2FUntitled.png?table=block&id=c1b5527c-8c2e-48f2-a833-ce17bca2ad72&spaceId=69ca2e73-08a0-44d6-970a-605a1725db83&width=1420&userId=&cache=v2)
 
 ## 1. Installation
 
