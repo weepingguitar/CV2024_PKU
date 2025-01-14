@@ -21,18 +21,6 @@ def gDiffLoss(fake, real):
     return loss
 
 
-def gradient_penalty(y_pred, voxel_blend):
-    gradients = torch.autograd.grad(
-        outputs=y_pred,
-        inputs=voxel_blend,
-        grad_outputs=torch.ones_like(y_pred),
-        create_graph=True,
-    )[0]
-    gradient_norm = gradients.norm(2, dim=1)
-    penalty = torch.mean((gradient_norm - 1) ** 2) * 10
-    return penalty
-
-
 class GAN64_trainer:
     def __init__(self, args):
         self.args = args
@@ -71,24 +59,16 @@ class GAN64_trainer:
         self.G_loss1 = gDiffLoss
         # self.G_loss1=torch.nn.BCELoss()
         self.G_loss2 = lambda y_pred: torch.mean(y_pred)
-
         # self.G_loss2=nn.BCELoss().to(self.args.device)
         self.D_loss1 = lambda y_pred: torch.mean(y_pred)
 
         # self.D_loss1=nn.BCELoss().to(self.args.device)
         self.D_loss2 = lambda y_pred: -torch.mean(y_pred)
         # self.D_loss2=nn.BCELoss().to(self.args.device)
-        self.D_loss3 = gradient_penalty
         self.D_loss_fake = []
         self.D_loss_real = []
-        self.D_loss_grad = []
         self.G_loss_diff = []
         self.G_loss_pred = []
-
-    def blend(self, vox_fake, vox_real):
-        n = vox_fake.shape[0]
-        alpha = torch.rand(n, 1, 1, 1).to(self.args.device)
-        return alpha * vox_fake + (1 - alpha) * vox_real
 
     def add(self, vox_fake, vox_real):
         return torch.clamp(vox_fake + vox_real, 0, 1)
@@ -207,7 +187,8 @@ def train(trainer: GAN64_trainer):
                 frags = frags.to(trainer.args.device)
                 voxels = voxels.to(trainer.args.device)
                 labels = labels.to(trainer.args.device)
-
+                voxels = voxels > 0.5
+                voxels = voxels.float()
                 # if (
                 #     trainer.args.global_step % trainer.args.g_steps == 0
                 #     or trainer.args.global_step > 200
@@ -228,11 +209,7 @@ def train(trainer: GAN64_trainer):
                     if len(trainer.D_loss_real) == 0
                     else trainer.D_loss_real[-1]
                 )
-                D_loss_grad = (
-                    float("inf")
-                    if len(trainer.D_loss_grad) == 0
-                    else trainer.D_loss_grad[-1]
-                )
+
                 G_loss_pred = (
                     float("inf")
                     if len(trainer.G_loss_pred) == 0
@@ -256,14 +233,13 @@ def train(trainer: GAN64_trainer):
 
             D_loss_fake = np.mean(trainer.D_loss_fake)
             D_loss_real = np.mean(trainer.D_loss_real)
-            D_loss_grad = np.mean(trainer.D_loss_grad)
             G_loss_pred = np.mean(trainer.G_loss_pred)
             G_loss_diff = np.mean(trainer.G_loss_diff)
 
             progress.update(
                 task1,
                 completed=epoch,
-                description=f"[red]Epoch Training({epoch}/{trainer.args.epochs}), ({D_loss_fake:.2f},{D_loss_real:.2f},{D_loss_grad:.2f},{G_loss_pred:.2f},{G_loss_diff:.2f})...",
+                description=f"[red]Epoch Training({epoch}/{trainer.args.epochs}), ({D_loss_fake:.2f},{D_loss_real:.2f},{G_loss_pred:.2f},{G_loss_diff:.2f})...",
             )
             trainer.save(epoch)
 
@@ -287,8 +263,9 @@ def vaetrain(trainer: GAN64_trainer):
                 trainer.args.global_step += 1
                 frags = frags.to(trainer.args.device)
                 voxes = voxes.to(trainer.args.device)
-                labels = labels.to(trainer.args.device)  # fixed: device bug
-
+                labels = labels.to(trainer.args.device)  
+                voxes=voxes>0.5
+                voxes=voxes.float()
                 trainer.train_vae(voxes, frags, labels)
 
                 G_loss_diff = (

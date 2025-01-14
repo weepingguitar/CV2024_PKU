@@ -252,13 +252,8 @@ def train(trainer:GAN32_trainer):
                 #     trainer.train_G(voxels,frags,labels)
                 D_loss_fake = float("inf") if len(trainer.D_loss_fake) == 0 else trainer.D_loss_fake[-1]
                 D_loss_real = float("inf") if len(trainer.D_loss_real) == 0 else trainer.D_loss_real[-1]
-                D_loss_grad = float("inf") if len(trainer.D_loss_grad) == 0 else trainer.D_loss_grad[-1]
                 G_loss_pred = float("inf") if len(trainer.G_loss_pred) == 0 else trainer.G_loss_pred[-1]
                 G_loss_diff = float("inf") if len(trainer.G_loss_diff) == 0 else trainer.G_loss_diff[-1]
-
-                # if step%10==0:
-                #     print(trainer.D_loss_fake)
-                #     print(trainer.D_loss_real)
 
                 progress.update(
                     task2,
@@ -274,14 +269,13 @@ def train(trainer:GAN32_trainer):
 
             D_loss_fake = np.mean(trainer.D_loss_fake)
             D_loss_real = np.mean(trainer.D_loss_real)
-            D_loss_grad = np.mean(trainer.D_loss_grad)
             G_loss_pred = np.mean(trainer.G_loss_pred)
             G_loss_diff = np.mean(trainer.G_loss_diff)
 
             progress.update(
                 task1,
                 completed=epoch,
-                description=f"[red]Epoch Training({epoch}/{trainer.args.epochs}), ({D_loss_fake:.2f},{D_loss_real:.2f},{D_loss_grad:.2f},{G_loss_pred:.2f},{G_loss_diff:.2f})...",
+                description=f"[red]Epoch Training({epoch}/{trainer.args.epochs}), ({D_loss_fake:.2f},{D_loss_real:.2f},{G_loss_pred:.2f},{G_loss_diff:.2f})...",
             )
             trainer.save(epoch)
 
@@ -291,7 +285,7 @@ def main():
     parser.add_argument("--train_data_path", type=str, default="./data")
     parser.add_argument("--test_data_path", type=str, default="./data")
     parser.add_argument("--batch_size", type=int, default=8)
-    parser.add_argument("--epochs", type=int, default=10)
+    parser.add_argument("--epochs", type=int, default=20)
     parser.add_argument("--g_lr", type=float, default=1e-3)
     parser.add_argument("--d_lr", type=float, default=1e-4)
     parser.add_argument("--g_beta1", type=float, default=0.9)
@@ -305,20 +299,16 @@ def main():
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--global_step", type=int, default=0)
     parser.add_argument("--g_steps", type=int, default=1)
-    parser.add_argument("--vae", type=str, default="true")
+    parser.add_argument("--vae", type=str, default="false")
     parser.add_argument("--vae_epochs", type=int, default=5)
     args = parser.parse_args()
 
     trainer=GAN32_trainer(args)
     # trainer.load_model("G32_1_2025-01-10-23-32-17.pth", "D32_1_2025-01-10-23-32-17.pth")
     if args.vae=="true":
-
         vaetrain(trainer)
     else:
-        # trainer.load_g("G32VAE_5_2025-01-12-17-05-09.pth")
-        trainer.load_model(
-            "G32_6_2025-01-13-00-41-58.pth", "D32_6_2025-01-13-00-41-58.pth"
-        )
+        #trainer.load_g("G32VAE_5_2025-01-12-17-05-09.pth") 
         train(trainer)
 
 if __name__ == "__main__":

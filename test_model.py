@@ -41,39 +41,38 @@ def test(args):
     value1520=[[] for _ in range(11)]
     value2030=[[] for _ in range(11)]
     value30100=[[] for _ in range(11)]
-    for i in range(3):
-        for step, (frags, voxels, labels, path) in enumerate(
-        tqdm(test_loader, desc="Processing")
-        ):
+    for step, (frags, voxels, labels, path) in enumerate(
+    tqdm(test_loader, desc="Processing")
+    ):
 
-            frags=frags.to(device)
-            voxels=voxels.to(device)
-            labels=labels.to(device)
-            fake_voxels=G(frags,labels)
-            voxels=voxels>0.5
+        frags=frags.to(device)
+        voxels=voxels.to(device)
+        labels=labels.to(device)
+        fake_voxels=G(frags,labels)
+        voxels=voxels>0.5
 
-            rate=torch.sum(frags).item()/torch.sum(voxels).item()
-            # print(rate)
+        rate=torch.sum(frags).item()/torch.sum(voxels).item()
+        # print(rate)
 
-            if args.loss=='DSC':
-                fake_voxels = fake_voxels > 0.8
-                value=DSC(fake_voxels,voxels).item()
-            if args.loss=='MSE':
-                voxels=voxels.float()
-                value=MSE(fake_voxels,voxels).item()
-            if args.loss=='JAC':
-                fake_voxels = fake_voxels > 0.8
-                value=JAC(fake_voxels,voxels).item()
+        if args.loss=='DSC':
+            fake_voxels = fake_voxels > 0.8
+            value=DSC(fake_voxels,voxels).item()
+        if args.loss=='MSE':
+            voxels=voxels.float()
+            value=MSE(fake_voxels,voxels).item()
+        if args.loss=='JAC':
+            fake_voxels = fake_voxels > 0.8
+            value=JAC(fake_voxels,voxels).item()
 
-            if rate>0.15 and rate<0.2:
-                value1520[int(labels)].append(value)
-            if rate>=0.2 and rate<0.3:
-                value2030[int(labels)].append(value)
-            if rate>=0.3:
-                value30100[int(labels)].append(value)
+        if rate>0.15 and rate<0.2:
+            value1520[int(labels)].append(value)
+        if rate>=0.2 and rate<0.3:
+            value2030[int(labels)].append(value)
+        if rate>=0.3:
+            value30100[int(labels)].append(value)
                 
-        # test_DSC+=DSC(fake_voxels,voxels)/len(test_loader)
-    print(args.model)
+ 
+    
     for i in range(11):
         print('label:',i)
         
@@ -89,4 +88,6 @@ if __name__ == '__main__':
     parser.add_argument('--G_model_path', type=str, default='G32_2_2025-01-13-01-22-37.pth')
     parser.add_argument('--loss', type=str, default='MSE')
     args=parser.parse_args()
+    print("testing:",args.model)
+    print("evaluation function:",args.loss)
     test(args)
