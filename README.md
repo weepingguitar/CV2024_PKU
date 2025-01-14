@@ -49,6 +49,7 @@ pyvox: https://github.com/gromgull/py-vox-io
 
 1. To test the model, run the following command.
    ```shell
-   python test_visualize.py
+   python test_visualize.py --dim_size 32 --model_path G32_2_2025-01-13-01-22-37.pth --selecte_class 3
+   python test_visualize.py --dim_size 64 --model_path G64_16_2025-01-13-17-33-07.pth --selecte_class 8
    ```
-   The command will random select a sample file from test dataset and visualize the generated result and the ground truth.
+   The command will random select a sample file from test dataset and visualize the generated result and the ground truth. You can choose the dim_size, model_path and the selected_class(selected_class=0 means choose 1 example from all 11 classes)
