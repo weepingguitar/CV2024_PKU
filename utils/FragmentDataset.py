@@ -60,7 +60,7 @@ def __getfractures__(self, idx):
 
 # lathan:for test
 class FragmentDataset(Dataset):
-    def __init__(self, vox_path, vox_type, dim_size=64, transform=None):
+    def __init__(self, vox_path, vox_type, dim_size=64, transform=None,selecte_class=0):
         #  you may need to initialize self.vox_type, self.vox_path, self.transform, self.dim_size, self.vox_files
         # self.vox_files is a list consists all file names (can use sorted() method and glob.glob())
         # please delete the "return" in __init__
@@ -68,7 +68,10 @@ class FragmentDataset(Dataset):
         self.path='data'
         self.vox_type=vox_type
         self.dim_size=dim_size
-        self.vox_files=sorted(glob.glob(os.path.join(self.path,self.vox_type,"10","*.vox")))
+        if selecte_class==0:
+            self.vox_files=sorted(glob.glob(os.path.join(self.path,self.vox_type,"*","*.vox")))
+        if selecte_class!=0:
+            self.vox_files=sorted(glob.glob(os.path.join(self.path,self.vox_type,f"{selecte_class}","*.vox")))
         print('init')
         self.transform=transform
 
