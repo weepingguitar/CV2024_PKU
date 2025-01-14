@@ -1,4 +1,5 @@
 # Let’s Make Pottery: GANs for Voxel Completion in Ancient Pottery Dataset
+![image](https://github.com/user-attachments/assets/3c5be7ed-c46f-466f-ae0d-7a4895c1a697)
 
 This repository implemented GAN for pottery completion.
 
