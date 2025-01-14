@@ -14,7 +14,6 @@ parser.add_argument('--selecte_class', type=int, default=3) #选取class。0表�
 args = parser.parse_args()
 
 
-
 device=torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 test_dataset=FragmentDataset(vox_path='data',vox_type='test',dim_size=args.dim_size,transform=None,selecte_class=args.selecte_class)
 
