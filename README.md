@@ -36,11 +36,22 @@ pyvox: https://github.com/gromgull/py-vox-io
 
 ## 3. Training
 
-1. To train the model, run the following command.
+1. To train the GAN32 model, run the following command.
 
    ```shell
-   python training_GAN32.py
-   python training_GAN64.py
+   python training_GAN32.py --g_lr 1e-3 --vae true --vae_epochs 5
+   ```
+   Then load the G model, run the following commad.
+   ```shell
+   python training_GAN32.py --g_lr 1e-3 --d_lr 1e-4 --vae false 
+   ```
+2. To train the GAN64 model, run the following command.
+   ```shell
+   python training_GAN64.py --g_lr 1e-4 --vae true --vae_epochs 5
+   ```
+   Then load the G model, run the following commad.
+   ```shell
+   python training_GAN64.py --g_lr 1e-4 --d_lr 1e-6 --vae false 
    ```
 
    The first command will train the model on 32x32x32 voxel data, and the second command will train the model on 64x64x64 voxel data. For reference, with 32 resolution, it takes about 75min to train the VAE only for 5 epochs, and about 4.5h to train the GAN for 20 epochs.
