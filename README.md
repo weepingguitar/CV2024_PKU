@@ -9,15 +9,15 @@ This repository implemented GAN for pottery completion.
 The code has been tested on Ubuntu 20.04 with 1 Nvidia Tesla V100S-PCIE-32GB GPU.
 
 1. You can download the dataset from the link:
-https://disk.pku.edu.cn:443/link/6B902375BB5D488F5BB8B0FF51512F12
-
-2. Run it locally using python 3.11 and installing the dependencies:
+https://drive.google.com/file/d/1KLdH0i4bIJnzconPpPXWsMcmg06PcQSH/view?usp=sharing
+https://drive.google.com/file/d/1sMqk8f2FuIBX3oo9HFNRGn4KUFWc097F/view?usp=sharing
+3. Run it locally using python 3.11 and installing the dependencies:
    ```shell
    pip install - r requirements.txt
    conda env create -f environment.yml
    ```
 
-3. Activate the new environment:
+4. Activate the new environment:
    ```shell
    conda activate vasija
    ```
