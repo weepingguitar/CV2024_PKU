@@ -1,7 +1,7 @@
 *.pth
 data
 runs
-images
+
 .vscode
 __pycache__
 *.pt
